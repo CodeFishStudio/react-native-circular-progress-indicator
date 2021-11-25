@@ -45,6 +45,9 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
   subtitleStyle = {},
   subtitleColor,
   subtitleFontSize,
+  progressContainerStyle,
+  valueSuffixStyle,
+  valuePrefixStyle,
 }) => {
   const styleProps = {
     radius,
@@ -77,7 +80,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
   });
 
   const progressValue = useDerivedValue(() => {
-    return `${valuePrefix}${Math.round(animatedValue.value)}${valueSuffix}`;
+    return `${Math.round(animatedValue.value)}`;
   });
 
   const animatedTextProps = useAnimatedProps(() => {
@@ -98,7 +101,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
   }, [value]);
 
   return (
-    <View>
+        <View>
       <Svg
         width={radius * 2}
         height={radius * 2}
@@ -144,10 +147,12 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         ]}
       >
         {showProgressValue && (
+            <View style={progressContainerStyle}>
+          <Text style={valuePrefixStyle}>{valuePrefix}</Text>
           <AnimatedInput
             underlineColorAndroid={"transparent"}
             editable={false}
-            defaultValue={`${valuePrefix}${initialValue}${valueSuffix}`}
+            defaultValue={`${initialValue}`}
             style={[
               dynamicStyles(styleProps).input,
               textStyle,
@@ -155,6 +160,8 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
             ]}
             animatedProps={animatedTextProps}
           />
+          <Text style={valueSuffixStyle}>{valueSuffix}</Text>
+          </View>
         )}
         {title && title !== "" ? (
           <Text
