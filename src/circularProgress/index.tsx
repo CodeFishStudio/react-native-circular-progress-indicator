@@ -69,10 +69,20 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
 
   const animatedCircleProps = useAnimatedProps(() => {
     let biggestValue = Math.min(100, Math.max(initialValue, maxValue));
+
     biggestValue = biggestValue <= 0 ? 1 : biggestValue;
-    const maxPercentage: number = clockwise
+
+    // Limit circle to 100%
+    let maxPercentage: number = Math.min(100, (clockwise
       ? (100 * animatedValue.value) / biggestValue
-      : (100 * -animatedValue.value) / biggestValue;
+      : (100 * -animatedValue.value) / biggestValue));
+
+    
+
+    // Stops tips touching prematurely
+    if (maxPercentage < 100) {
+        maxPercentage *= 0.97;  
+    }
 
     return {
       strokeDashoffset:
